@@ -38,9 +38,9 @@ var rootCmd = &cobra.Command{
 }
 
 func RootRunFunc(cmd *cobra.Command, args []string) {
-	fommat := output == "json"
-	err := pkg.Yj(file,fommat)
-	if err!= nil {
+	format := output == "json"
+	err := pkg.Yj(file, format)
+	if err != nil {
 		//logger.Error(err)
 	}
 

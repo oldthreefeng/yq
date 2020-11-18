@@ -1,0 +1,52 @@
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod download
+    # you may remove this if you don't need go generate
+    - go generate ./...
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X github.com/oldthreefeng/yq/cmd.Version={{.Version}} -X github.com/oldthreefeng/yq/cmd.Githash={{.ShortCommit}} -X github.com/oldthreefeng/yq/cmd.Buildstamp={{.Date}} -X github.com/oldthreefeng/yq/cmd.Author=goreleaser
+archives:
+  - replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      amd64: x86_64
+      arm64: aarch64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+
+dockers:
+  -
+    goos: linux
+
+    goarch: amd64
+
+    binaries:
+      - yq
+
+    image_templates:
+      - "louisehong/{{.ProjectName}}:latest"
+      - "louisehong/{{.ProjectName}}:{{.Tag}}"
+
+    dockerfile: Dockerfile
+    extra_files:
+      - scripts/entrypoint.sh
