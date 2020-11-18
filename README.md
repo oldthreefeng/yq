@@ -8,7 +8,7 @@ $ yq -f test.yaml  | jq .
 
 # usr stdin
 
-$ cat test.yaml | yq -f - | jq.
+$ cat test.yaml | yq -f - | jq .
 
 # use url
 
@@ -23,9 +23,17 @@ $ yq -f test/test.json -o yaml  | jq .
 
 # usr stdin
 
-$ cat test/test.json  -o yaml | yq -f - | jq.
+$ cat test/test.json  -o yaml | yq -f - | jq .
 
 # use url
 
 $ yq -f  https://fenghong.tech/yq/default.json -o yaml   | jq .
+```
+
+## docker use
+
+docker only support url if u don't use volume
+ 
+```
+$ docker run --rm  louisehong/yq  -f https://fenghong.tech/yq/default.yaml   | jq .
 ```

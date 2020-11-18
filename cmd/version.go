@@ -48,10 +48,10 @@ var (
 )
 
 func VersionStr() {
-	fmt.Printf(`mycli is cli tools to manage huawei cloud from Golang. Only for sealos-arm64 test
-run "mycli -h" get more help, more see https://github.com/oldthreefeng/mycli
+	fmt.Printf(`yq is cli tools to trans yaml to json ; or json to yaml
+run "yq -h" get more help, more see https://github.com/oldthreefeng/yq
 `)
-	fmt.Printf("mycli version :       %s\n", Version)
+	fmt.Printf("yq version :       %s\n", Version)
 	fmt.Printf("Git Commit Hash:     %s\n", Githash)
 	fmt.Printf("Build Time :         %s\n", Buildstamp)
 	fmt.Printf("BuildBy :            %s\n", Author)
