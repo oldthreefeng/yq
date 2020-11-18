@@ -7,25 +7,28 @@ import (
 	_ "github.com/wonderivan/logger"
 )
 
-func Yj(config string) error {
+// format when json is true . yaml is false
+func Yj(config string, format bool) error {
 	bt, err := GetByteStream(config)
 	if err != nil {
 		logger.Error(err)
 		return err
 	}
-	if !HasJSONPrefix(bt) {
+	// yaml byte , json out
+	if !HasJSONPrefix(bt) && format {
 		bt, err = yaml.YAMLToJSON(bt)
 		if err != nil {
 			logger.Error(err)
-			return err
 		}
 		fmt.Println(string(bt))
-	} else {
+		// json byte , yaml out
+	} else if HasJSONPrefix(bt) && !format {
 		bt, err = yaml.JSONToYAML(bt)
 		if err != nil {
 			logger.Error(err)
-			return err
 		}
+		fmt.Println(string(bt))
+	} else {
 		fmt.Println(string(bt))
 	}
 	return nil

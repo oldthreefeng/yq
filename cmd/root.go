@@ -25,7 +25,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfgFile, file string
+var cfgFile, file, output string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -38,7 +38,8 @@ var rootCmd = &cobra.Command{
 }
 
 func RootRunFunc(cmd *cobra.Command, args []string) {
-	err := pkg.Yj(file)
+	fommat := output == "json"
+	err := pkg.Yj(file,fommat)
 	if err!= nil {
 		//logger.Error(err)
 	}
@@ -62,7 +63,8 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.yq.yaml)")
-	rootCmd.PersistentFlags().StringVarP(&file, "file", "f", "", "support stdin/url/file, json/yaml format, out put for json")
+	rootCmd.PersistentFlags().StringVarP(&file, "file", "f", "", "support stdin/url/file, json/yaml format")
+	rootCmd.PersistentFlags().StringVarP(&output, "output", "o", "json", "output json/yaml format, out put for json")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
