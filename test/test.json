@@ -1,0 +1,26 @@
+{
+  "content": "Or we\ncan auto\nconvert line breaks\nto save space",
+  "json": [
+    "rigid",
+    "better for data interchange"
+  ],
+  "object": {
+    "array": [
+      {
+        "null_value": null
+      },
+      {
+        "boolean": true
+      },
+      {
+        "integer": 1
+      }
+    ],
+    "key": "value"
+  },
+  "paragraph": "Blank lines denote\nparagraph breaks\n",
+  "yaml": [
+    "slim and flexible",
+    "better for configuration"
+  ]
+}
