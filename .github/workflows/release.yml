@@ -9,30 +9,44 @@ jobs:
   goreleaser:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      -
+        name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Set up Go
+      -
+        name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.14
-      - name: Docker Login
+          go-version: 1.15
+      -
+        name: Check
+        run: |
+          ./goreleaser check
+      -
+        name: Docker Login
         if: success() && startsWith(github.ref, 'refs/tags/v')
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v2
-        with:
-          version: latest
-          args: release --rm-dist
+          echo "${GITHUB_TOKEN}" | docker login ghcr.io --username $GITHUB_ACTOR --password-stdin
+
+      -
+        name: GoReleaser
+        if: success()
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCKER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Clear
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          if [[ $GITHUB_REF == refs/tags/v* ]]; then
+            ./goreleaser
+          else
+            ./goreleaser --snapshot
+          fi
+      -
+        name: Clear
         if: always() && startsWith(github.ref, 'refs/tags/v')
         run: |
           rm -f ${HOME}/.docker/config.json
