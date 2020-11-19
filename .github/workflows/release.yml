@@ -1,52 +1,57 @@
-name: release
+name: Release
 
 on:
   push:
+    branches-ignore:
+      - '**'
     tags:
-      - "*"
+      - '*'
 
 jobs:
   goreleaser:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      -
-        name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.15
-      -
-        name: Check
-        run: |
-          ./goreleaser check
-      -
-        name: Docker Login
-        if: success() && startsWith(github.ref, 'refs/tags/v')
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-        run: |
-          echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
-          echo "${GITHUB_TOKEN}" | docker login ghcr.io --username $GITHUB_ACTOR --password-stdin
+      - name: Checkout
+        uses: actions/checkout@master
 
-      -
-        name: GoReleaser
-        if: success()
+      - name: Set up Go
+        uses: actions/setup-go@master
+        with:
+          go-version: 1.14.x
+
+      - name: Prepare
+        id: prepare
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          echo ::set-output name=tag_name::${TAG}
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v1
+        with:
+          version: latest
+          args: release --rm-dist --timeout=1h
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          VERSION: ${{ steps.prepare.outputs.tag_name }}
+
+      - name: set up buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
+        with:
+          version: latest
+
+      - name: login to dockerhub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: build (and publish) main image
+        env:
+          # fork friendly ^^
+          DOCKER_REPO: ${{ secrets.DOCKER_REPO }}
         run: |
-          if [[ $GITHUB_REF == refs/tags/v* ]]; then
-            ./goreleaser
-          else
-            ./goreleaser --snapshot
-          fi
-      -
-        name: Clear
-        if: always() && startsWith(github.ref, 'refs/tags/v')
-        run: |
-          rm -f ${HOME}/.docker/config.json
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            --build-arg VERSION=${{ steps.prepare.outputs.tag_name }} \
+            --push \
+            -t ${DOCKER_REPO:-louisehong/yq}:${{ steps.prepare.outputs.tag_name }} \
+            -t ${DOCKER_REPO:-louisehong/yq}:latest \
+            -f Dockerfile.hub \
+            .

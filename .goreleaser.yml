@@ -34,19 +34,19 @@ changelog:
       - '^docs:'
       - '^test:'
 
-dockers:
-  -
-    goos: linux
-
-    goarch: amd64
-
-    binaries:
-      - yq
-
-    image_templates:
-      - "louisehong/{{.ProjectName}}:latest"
-      - "louisehong/{{.ProjectName}}:{{.Tag}}"
-
-    dockerfile: Dockerfile
-    extra_files:
-      - scripts/entrypoint.sh
+#dockers:
+#  -
+#    goos: linux
+#
+#    goarch: amd64
+#
+#    binaries:
+#      - yq
+#
+#    image_templates:
+#      - "louisehong/{{.ProjectName}}:latest"
+#      - "louisehong/{{.ProjectName}}:{{.Tag}}"
+#
+#    dockerfile: Dockerfile.hub
+#    extra_files:
+#      - scripts/entrypoint.sh

@@ -1,0 +1,16 @@
+FROM alpine:latest
+MAINTAINER "louisehong <louisehong4168@gmail.com>"
+RUN  apk update \
+        && apk upgrade \
+        && apk add --no-cache bash  \
+                       curl
+
+ENTRYPOINT ["/opt/local/louisehong/yq"]
+
+ARG TARGETPLATFORM
+WORKDIR /opt/local/louisehong/
+
+RUN --mount=target=/build tar xf /build/dist/yq_*_$(echo ${TARGETPLATFORM} | tr '/' '_' | sed -e 's/arm_/arm/').tar.gz
+
+CMD ["--help"]
+
