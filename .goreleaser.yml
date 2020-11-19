@@ -16,13 +16,13 @@ builds:
       - arm64
     ldflags:
       - -s -w -X github.com/oldthreefeng/yq/cmd.Version={{.Version}} -X github.com/oldthreefeng/yq/cmd.Githash={{.ShortCommit}} -X github.com/oldthreefeng/yq/cmd.Buildstamp={{.Date}} -X github.com/oldthreefeng/yq/cmd.Author=goreleaser
-archives:
-  - replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      amd64: x86_64
-      arm64: aarch64
+#archives:
+#  - replacements:
+#      darwin: darwin
+#      linux: linux
+#      windows: windows
+#      amd64: amd64
+#      arm64: arm64
 checksum:
   name_template: 'checksums.txt'
 snapshot:
