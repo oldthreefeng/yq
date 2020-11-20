@@ -37,3 +37,5 @@ docker only support url if u don't use volume
 ```
 $ docker run --rm  louisehong/yq  -f https://fenghong.tech/yq/default.yaml   | jq .
 ```
+
+## use goreleaser and github actions to cicd
