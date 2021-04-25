@@ -1,41 +1,42 @@
 ## Usage
 
-trans yaml to json, default is json
+trans yaml to json, default is yaml
 
 ```
 # use file
-$ yq -f test.yaml  | jq .
+$ yq -f test.yaml -o json | jq .
 
 # usr stdin
 
-$ cat test.yaml | yq -f - | jq .
+$ cat test.yaml | yq -f - -o json| jq .
 
 # use url
 
-$ yq -f  https://fenghong.tech/yq/default.yaml   | jq .
+$ yq -f  https://fenghong.tech/yq/default.yaml -o json  | jq .
 ```
 
-trans json to yaml , output u should set to yaml. or will json to json.
+trans json to yaml.
 
 ```
 # use file
-$ yq -f test/test.json -o yaml  | jq .
+$ yq -f test/test.json  
 
 # usr stdin
 
-$ cat test/test.json  -o yaml | yq -f - | jq .
+$ cat test/test.json | yq -f - 
 
 # use url
 
-$ yq -f  https://fenghong.tech/yq/default.json -o yaml   | jq .
+$ yq -f  https://fenghong.tech/yq/default.json 
 ```
+
 
 ## docker use
 
 docker only support url if u don't use volume
  
 ```
-$ docker run --rm  louisehong/yq  -f https://fenghong.tech/yq/default.yaml   | jq .
+$ docker run --rm  louisehong/yq  -f https://fenghong.tech/yq/default.yaml -o json  | jq .
 ```
 
 ## use goreleaser and github actions to cicd
