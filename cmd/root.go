@@ -38,10 +38,15 @@ var rootCmd = &cobra.Command{
 }
 
 func RootRunFunc(cmd *cobra.Command, args []string) {
-	format := output == "json"
+	format := output == "yaml"
+	if len(args) == 1 {
+		file = args[0]
+		fmt.Println(file)
+	}
 	err := pkg.Yj(file, format)
 	if err != nil {
-		//logger.Error(err)
+		// logger.Error(err)
+		return
 	}
 
 }
@@ -64,7 +69,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.yq.yaml)")
 	rootCmd.PersistentFlags().StringVarP(&file, "file", "f", "", "support stdin/url/file, json/yaml format")
-	rootCmd.PersistentFlags().StringVarP(&output, "output", "o", "json", "output json/yaml format, out put for json")
+	rootCmd.PersistentFlags().StringVarP(&output, "output", "o", "yaml", "output json/yaml format, out put for json")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.

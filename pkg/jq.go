@@ -15,14 +15,14 @@ func Yj(config string, format bool) error {
 		return err
 	}
 	// yaml byte , json out
-	if !HasJSONPrefix(bt) && format {
+	if !HasJSONPrefix(bt) && !format {
 		bt, err = yaml.YAMLToJSON(bt)
 		if err != nil {
 			logger.Error(err)
 		}
 		fmt.Println(string(bt))
 		// json byte , yaml out
-	} else if HasJSONPrefix(bt) && !format {
+	} else if HasJSONPrefix(bt) && format {
 		bt, err = yaml.JSONToYAML(bt)
 		if err != nil {
 			logger.Error(err)
