@@ -39,10 +39,6 @@ var rootCmd = &cobra.Command{
 
 func RootRunFunc(cmd *cobra.Command, args []string) {
 	format := output == "yaml"
-	if len(args) == 1 {
-		file = args[0]
-		fmt.Println(file)
-	}
 	err := pkg.Yj(file, format)
 	if err != nil {
 		// logger.Error(err)

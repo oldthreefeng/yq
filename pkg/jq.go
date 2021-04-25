@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/ghodss/yaml"
 	"github.com/wonderivan/logger"
-	_ "github.com/wonderivan/logger"
+	// _ "github.com/wonderivan/logger"
 )
 
 // format when json is true . yaml is false
